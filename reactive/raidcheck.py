@@ -58,6 +58,7 @@ def main():
 
     nrpe_setup.write()
     reactive.set_state('raidcheck_installed')
-
+    hookenv.status_set('active')
+    hookenv.log('Unit is ready')
 
 
