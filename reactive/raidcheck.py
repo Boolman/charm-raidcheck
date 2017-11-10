@@ -3,6 +3,9 @@
 import urllib
 import subprocess
 import re
+import sys
+import os
+sys.path.append('lib')
 import charms.reactive as reactive
 from charms import apt
 from charmhelpers.core import hookenv
@@ -10,6 +13,7 @@ from charmhelpers.contrib.charmsupport import nrpe
 from charmhelpers.core.host import rsync
 
 
+NAGIOS_PLUGINS = '/usr/lib/nagios/plugins'
 hooks = hookenv.Hooks()
 
 def install_packages(packages):
@@ -19,7 +23,7 @@ def install_packages(packages):
     apt.install_queued()
 
 @hooks.hook('upgrade-charm')
-def upgrade-charm():
+def upgrade_charm():
     main()
 
 @hooks.hook('nrpe-external-master-relation-joined',
