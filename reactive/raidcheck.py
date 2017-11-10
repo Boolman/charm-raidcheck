@@ -24,10 +24,11 @@ def install_packages(packages):
 
 @hooks.hook('upgrade-charm')
 def upgrade_charm():
-    main()
+    hookenv.status_set('maintenance', 'Forcing package update and reconfiguration on upgrade-charm')
+    hookenv.status_set('maintenance', 'Reconfiguring')
+    remove_state('raidcheck.installed')
 
-@hooks.hook('nrpe-external-master-relation-joined',
-            'nrpe-external-master-relation-changed')
+@reactive.when_not('raidcheck_installed')
 def main():
     cmd = subprocess.Popen(['lsmod'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stederr = cmd.communicate()
@@ -47,7 +48,7 @@ def main():
         add_lsi_check()
 
     nrpe_setup.write()
-
+    reactive.set_state('raidcheck_installed')
 
 def add_lsi_check():
     nrpe_setup.add_check(
