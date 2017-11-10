@@ -40,23 +40,24 @@ def main():
                            'check_lsi_raid'),
               os.path.join(NAGIOS_PLUGINS, 'check_lsi_raid'))
 
-    if megaraid:
-        install_packages(['storcli', 'libfile-which-perl'])
-        add_lsi_check()
-
-    nrpe_setup.write()
-    reactive.set_state('raidcheck_installed')
-
-def add_lsi_check():
     hostname = nrpe.get_nagios_hostname()
     current_unit = nrpe.get_nagios_unit_name()
     nrpe_setup = nrpe.NRPE(hostname=hostname)
-    nrpe_setup.add_check(
-        shortname='lsi-raidcheck',
-        description='LSI Raid Check {%s}' % current_unit,
-        check_cmd=(os.path.join(NAGIOS_PLUGINS, 'check_lsi_raid'))
-    )
 
+    # Install megaraid tools
+    # And add megaraid nagios check
+    if megaraid:
+        install_packages(['storcli', 'libfile-which-perl'])
+
+        nrpe_setup.add_check(
+          shortname='lsi-raidcheck',
+          description='LSI Raid Check {%s}' % current_unit,
+          check_cmd=(os.path.join(NAGIOS_PLUGINS, 'check_lsi_raid'))
+        )
+
+
+    nrpe_setup.write()
+    reactive.set_state('raidcheck_installed')
 
 
 
