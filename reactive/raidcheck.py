@@ -35,9 +35,6 @@ def main():
     if re.compile('(megaraid).*').findall(stdout.decode('utf-8')):
         megaraid = True
 
-    hostname = nrpe.get_nagios_hostname()
-    current_unit = nrpe.get_nagios_unit_name()
-    nrpe_setup = nrpe.NRPE(hostname=hostname)
     if os.path.isdir(NAGIOS_PLUGINS):
         rsync(os.path.join(os.getenv('CHARM_DIR'), 'files', 'nagios',
                            'check_lsi_raid'),
@@ -51,6 +48,9 @@ def main():
     reactive.set_state('raidcheck_installed')
 
 def add_lsi_check():
+    hostname = nrpe.get_nagios_hostname()
+    current_unit = nrpe.get_nagios_unit_name()
+    nrpe_setup = nrpe.NRPE(hostname=hostname)
     nrpe_setup.add_check(
         shortname='lsi-raidcheck',
         description='LSI Raid Check {%s}' % current_unit,
