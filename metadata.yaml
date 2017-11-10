@@ -1,0 +1,17 @@
+name: raidcheck 
+summary: Install raid cli tool and adds a nagios-check
+maintainer:  Emil Ohgren <emil.ohgren@dgc.se>
+description: |
+    Install the appropriate cli package, adds a nagios check
+tags: ["nagios"]
+subordinate: true
+series:
+  - xenial
+requires:
+  host:
+    interface: juju-info
+    scope: container
+provides:
+  nrpe-external-master:
+    interface: nrpe-external-master
+    scope: container
