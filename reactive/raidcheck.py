@@ -40,9 +40,11 @@ def main():
         rsync(os.path.join(os.getenv('CHARM_DIR'), 'files', 'nagios',
                            'check_lsi_raid'),
               os.path.join(NAGIOS_PLUGINS, 'check_lsi_raid'))
+              
+    if os.path.isdir(SUDOERS_DIR):
         rsync(os.path.join(os.getenv('CHARM_DIR'), 'files', 'nagios',
                            'nagios_sudoers'),
-              os.path.join(SUDOERS_DIR, 'nagios_sudoers'))        
+              os.path.join(SUDOERS_DIR, 'nagios_sudoers'))
 
     hostname = nrpe.get_nagios_hostname()
     current_unit = nrpe.get_nagios_unit_name()
