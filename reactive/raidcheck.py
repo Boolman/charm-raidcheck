@@ -13,9 +13,9 @@ from charmhelpers.contrib.charmsupport import nrpe
 from charmhelpers.core.host import rsync
 
 
+
 NAGIOS_PLUGINS = '/usr/lib/nagios/plugins'
 SUDOERS_DIR = '/etc/sudoers.d'
-hooks = hookenv.Hooks()
 
 def install_packages(packages):
     hookenv.status_set('maintenance', 'Installing software')
@@ -23,7 +23,7 @@ def install_packages(packages):
     apt.queue_install(packages)
     apt.install_queued()
 
-@hooks.hook('upgrade-charm')
+@reactive.hook('upgrade-charm')
 def upgrade_charm():
     hookenv.status_set('maintenance', 'Forcing package update and reconfiguration on upgrade-charm')
     hookenv.status_set('maintenance', 'Reconfiguring')
