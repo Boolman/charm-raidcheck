@@ -14,6 +14,7 @@ from charmhelpers.core.host import rsync
 
 
 NAGIOS_PLUGINS = '/usr/lib/nagios/plugins'
+SUDOERS_DIR = '/etc/sudoers.d'
 hooks = hookenv.Hooks()
 
 def install_packages(packages):
@@ -39,6 +40,9 @@ def main():
         rsync(os.path.join(os.getenv('CHARM_DIR'), 'files', 'nagios',
                            'check_lsi_raid'),
               os.path.join(NAGIOS_PLUGINS, 'check_lsi_raid'))
+        rsync(os.path.join(os.getenv('CHARM_DIR'), 'files', 'nagios',
+                           'nagios_sudoers'),
+              os.path.join(SUDOERS_DIR, 'nagios_sudoers'))        
 
     hostname = nrpe.get_nagios_hostname()
     current_unit = nrpe.get_nagios_unit_name()
