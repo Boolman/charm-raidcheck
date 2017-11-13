@@ -40,7 +40,7 @@ def main():
         rsync(os.path.join(os.getenv('CHARM_DIR'), 'files', 'nagios',
                            'check_lsi_raid'),
               os.path.join(NAGIOS_PLUGINS, 'check_lsi_raid'))
-              
+
     if os.path.isdir(SUDOERS_DIR):
         rsync(os.path.join(os.getenv('CHARM_DIR'), 'files', 'nagios',
                            'nagios_sudoers'),
@@ -58,7 +58,7 @@ def main():
         nrpe_setup.add_check(
           shortname='lsi-raidcheck',
           description='LSI Raid Check {%s}' % current_unit,
-          check_cmd=(os.path.join(NAGIOS_PLUGINS, 'check_lsi_raid'))
+          check_cmd=('sudo' os.path.join(NAGIOS_PLUGINS, 'check_lsi_raid'))
         )
 
 
