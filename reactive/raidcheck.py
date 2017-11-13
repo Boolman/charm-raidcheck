@@ -26,7 +26,7 @@ def install_packages(packages):
 def upgrade_charm():
     hookenv.status_set('maintenance', 'Forcing package update and reconfiguration on upgrade-charm')
     hookenv.status_set('maintenance', 'Reconfiguring')
-    remove_state('raidcheck.installed')
+    remove_state('raidcheck_installed')
 
 @reactive.when_not('raidcheck_installed')
 def main():
