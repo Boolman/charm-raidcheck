@@ -58,7 +58,7 @@ def main():
         nrpe_setup.add_check(
           shortname='lsi-raidcheck',
           description='LSI Raid Check {%s}' % current_unit,
-          check_cmd=('sudo' + os.path.join(NAGIOS_PLUGINS, 'check_lsi_raid'))
+          check_cmd=(os.path.join(NAGIOS_PLUGINS, 'check_lsi_raid'))
         )
 
 
