@@ -46,6 +46,13 @@ def main():
                            'nagios_sudoers'),
               os.path.join(SUDOERS_DIR, 'nagios_sudoers'))
 
+
+    if os.path.isdir(NAGIOS_PLUGINS):
+        rsync(os.path.join(os.getenv('CHARM_DIR'), 'files', 'nagios',
+                           'check_bond'),
+              os.path.join(NAGIOS_PLUGINS, 'check_bond'))
+
+
     hostname = nrpe.get_nagios_hostname()
     current_unit = nrpe.get_nagios_unit_name()
     nrpe_setup = nrpe.NRPE(hostname=hostname)
@@ -56,10 +63,26 @@ def main():
         install_packages(['storcli', 'libfile-which-perl'])
 
         nrpe_setup.add_check(
-          shortname='lsi-raidcheck',
+          shortname='lsi-raid',
           description='LSI Raid Check {%s}' % current_unit,
           check_cmd=(os.path.join(NAGIOS_PLUGINS, 'check_lsi_raid'))
         )
+
+
+    # Install checks for the network bonds
+    if os.path.isfile('/proc/net/bonding/bond0') and \
+       os.path.isfile('/proc/net/bonding/bond1'):
+        nrpe_setup.add_check(
+          shortname='bond0',
+          description='Bond0 check {%s}' % current_unit,
+          check_cmd=(os.path.join(NAGIOS_PLUGINS, 'check_bond') + ' -i bond0 -p eth2')
+        )
+        nrpe_setup.add_check(
+          shortname='bond0',
+          description='Bond1 check {%s}' % current_unit,
+          check_cmd=(os.path.join(NAGIOS_PLUGINS, 'check_bond') + ' -i bond1 -p eth3')
+        )
+
 
 
     nrpe_setup.write()
